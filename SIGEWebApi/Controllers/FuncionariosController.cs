@@ -6,9 +6,14 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Principal;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using SIGEWebApi.Filters;
 using SIGEWebApi.Models;
 
 namespace SIGEWebApi.Controllers
@@ -38,6 +43,7 @@ namespace SIGEWebApi.Controllers
 
         // PUT: api/Funcionarios/5
         [ResponseType(typeof(void))]
+        [BasicAuthenticationAttribute]
         public async Task<IHttpActionResult> PutFuncionario(int id, Funcionario funcionario)
         {
             if (!ModelState.IsValid)
@@ -73,6 +79,7 @@ namespace SIGEWebApi.Controllers
 
         // POST: api/Funcionarios
         [ResponseType(typeof(Funcionario))]
+        [BasicAuthenticationAttribute]
         public async Task<IHttpActionResult> PostFuncionario(Funcionario funcionario)
         {
             if (!ModelState.IsValid)
@@ -88,6 +95,7 @@ namespace SIGEWebApi.Controllers
 
         // DELETE: api/Funcionarios/5
         [ResponseType(typeof(Funcionario))]
+        [BasicAuthenticationAttribute]
         public async Task<IHttpActionResult> DeleteFuncionario(int id)
         {
             Funcionario funcionario = await db.Funcionarios.FindAsync(id);
@@ -116,4 +124,5 @@ namespace SIGEWebApi.Controllers
             return db.Funcionarios.Count(e => e.Id == id) > 0;
         }
     }
+
 }
