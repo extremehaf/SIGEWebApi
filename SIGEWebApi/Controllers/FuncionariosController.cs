@@ -17,19 +17,22 @@ using SIGEWebApi.Filters;
 using SIGEWebApi.Models;
 
 namespace SIGEWebApi.Controllers
-{
+{    
     public class FuncionariosController : ApiController
     {
         private SIGEWebApiContext db = new SIGEWebApiContext();
 
         // GET: api/Funcionarios
-        public IQueryable<Funcionario> GetFuncionarios()
+        [ResponseType(typeof(List<Funcionario>))]
+        [BasicAuthenticationFilter(false)]
+        public async Task<List<Funcionario>> GetFuncionarios()
         {
-            return db.Funcionarios;
+            return await db.Funcionarios.ToListAsync();
         }
 
         // GET: api/Funcionarios/5
         [ResponseType(typeof(Funcionario))]
+        [BasicAuthenticationFilter(false)]
         public async Task<IHttpActionResult> GetFuncionario(int id)
         {
             Funcionario funcionario = await db.Funcionarios.FindAsync(id);
@@ -43,7 +46,7 @@ namespace SIGEWebApi.Controllers
 
         // PUT: api/Funcionarios/5
         [ResponseType(typeof(void))]
-        [BasicAuthenticationAttribute]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PutFuncionario(int id, Funcionario funcionario)
         {
             if (!ModelState.IsValid)
@@ -79,7 +82,7 @@ namespace SIGEWebApi.Controllers
 
         // POST: api/Funcionarios
         [ResponseType(typeof(Funcionario))]
-        [BasicAuthenticationAttribute]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PostFuncionario(Funcionario funcionario)
         {
             if (!ModelState.IsValid)
@@ -95,7 +98,7 @@ namespace SIGEWebApi.Controllers
 
         // DELETE: api/Funcionarios/5
         [ResponseType(typeof(Funcionario))]
-        [BasicAuthenticationAttribute]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> DeleteFuncionario(int id)
         {
             Funcionario funcionario = await db.Funcionarios.FindAsync(id);

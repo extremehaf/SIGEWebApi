@@ -200,10 +200,14 @@
     <Compile Include="Controllers\FuncionariosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
+    <Compile Include="Filters\ApiMessageError.cs" />
+    <Compile Include="Filters\BasicAuthenticationFilter.cs" />
+    <Compile Include="Filters\UnhandledExceptionFilter.cs" />
+    <Compile Include="Filters\WindowsBasicAuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\BasicAuthenticationHandler.cs" />
     <Compile Include="Migrations\201811012329245_Initial.cs" />
     <Compile Include="Migrations\201811012329245_Initial.Designer.cs">
       <DependentUpon>201811012329245_Initial.cs</DependentUpon>
@@ -212,6 +216,9 @@
     <Compile Include="Models\Funcionario.cs" />
     <Compile Include="Models\SIGEWebApiContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\BasicAuthenticationIdentity.cs" />
+    <Compile Include="Security\LoginStatus.cs" />
+    <Compile Include="Security\Win32Logon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
