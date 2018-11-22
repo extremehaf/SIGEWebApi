@@ -6,28 +6,22 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Principal;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using SIGEWebApi.Filters;
 using SIGEWebApi.Models;
 
 namespace SIGEWebApi.Controllers
-{    
+{
     public class FuncionariosController : ApiController
     {
         private SIGEWebApiContext db = new SIGEWebApiContext();
 
         // GET: api/Funcionarios
-        [ResponseType(typeof(List<Funcionario>))]
-        [BasicAuthenticationFilter(false)]
-        public async Task<List<Funcionario>> GetFuncionarios()
+        public IQueryable<Funcionario> GetFuncionarios()
         {
-            return await db.Funcionarios.ToListAsync();
+            return db.Funcionarios.Include(h => h.HorasTrabalhadas);
         }
 
         // GET: api/Funcionarios/5
@@ -35,7 +29,7 @@ namespace SIGEWebApi.Controllers
         [BasicAuthenticationFilter(false)]
         public async Task<IHttpActionResult> GetFuncionario(int id)
         {
-            Funcionario funcionario = await db.Funcionarios.FindAsync(id);
+            Funcionario funcionario = await db.Funcionarios.Include(h => h.HorasTrabalhadas).FirstOrDefaultAsync(f => f.Id == id);
             if (funcionario == null)
             {
                 return NotFound();
@@ -127,5 +121,4 @@ namespace SIGEWebApi.Controllers
             return db.Funcionarios.Count(e => e.Id == id) > 0;
         }
     }
-
 }

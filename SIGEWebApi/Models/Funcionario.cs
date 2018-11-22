@@ -24,5 +24,11 @@ namespace SIGEWebApi.Models
 
         [Column(Order = 3)]
         public string Cargo { get; set; }
+
+        [Column(Order = 4)]
+        public string Turno { get; set; }
+
+        [Column(Order = 5)]
+        public ICollection<HorasTrabalhadas> HorasTrabalhadas { get; set; }
     }
 }
