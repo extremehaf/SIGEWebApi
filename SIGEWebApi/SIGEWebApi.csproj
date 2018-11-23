@@ -200,6 +200,7 @@
     <Compile Include="Controllers\FuncionariosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HorasTrabalhadasController.cs" />
+    <Compile Include="Controllers\TreinamentoesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Filters\ApiMessageError.cs" />
     <Compile Include="Filters\BasicAuthenticationFilter.cs" />
@@ -221,10 +222,15 @@
     <Compile Include="Migrations\201811222333307_Turno-funcionario.Designer.cs">
       <DependentUpon>201811222333307_Turno-funcionario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811232127437_treinamento.cs" />
+    <Compile Include="Migrations\201811232127437_treinamento.Designer.cs">
+      <DependentUpon>201811232127437_treinamento.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Funcionario.cs" />
     <Compile Include="Models\HorasTrabalhadas.cs" />
     <Compile Include="Models\SIGEWebApiContext.cs" />
+    <Compile Include="Models\Treinamento.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\BasicAuthenticationIdentity.cs" />
     <Compile Include="Security\LoginStatus.cs" />
@@ -534,6 +540,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811222333307_Turno-funcionario.resx">
       <DependentUpon>201811222333307_Turno-funcionario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811232127437_treinamento.resx">
+      <DependentUpon>201811232127437_treinamento.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
