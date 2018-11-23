@@ -6,13 +6,17 @@ using System.Web.Mvc;
 
 namespace SIGEWebApi.Controllers
 {
-    public class HomeController : Controller
+    public class OperacaoController : Controller
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult CadastrarFuncionario()
+        {
+            return View("Cadastro.cshtml");
         }
     }
 }
