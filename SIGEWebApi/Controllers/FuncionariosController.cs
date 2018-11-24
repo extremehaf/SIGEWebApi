@@ -122,5 +122,7 @@ namespace SIGEWebApi.Controllers
         {
             return db.Funcionarios.Count(e => e.Id == id) > 0;
         }
+
+
     }
 }
