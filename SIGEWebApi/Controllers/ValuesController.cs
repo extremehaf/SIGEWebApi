@@ -8,7 +8,6 @@ using System.Web.Http.Cors;
 
 namespace SIGEWebApi.Controllers
 {
-    [EnableCors("*", "*", "*")]
     public class ValuesController : ApiController
     {
         // GET api/values

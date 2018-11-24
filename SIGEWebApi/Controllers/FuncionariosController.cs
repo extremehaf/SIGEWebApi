@@ -15,7 +15,6 @@ using SIGEWebApi.Models;
 
 namespace SIGEWebApi.Controllers
 {
-    [EnableCors("*", "*", "*")]
     public class FuncionariosController : ApiController
     {
         private SIGEWebApiContext db = new SIGEWebApiContext();

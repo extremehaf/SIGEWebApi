@@ -7,7 +7,6 @@ using System.Web.Mvc;
 
 namespace SIGEWebApi.Controllers
 {
-    [EnableCors("*", "*", "*")]
     public class RelatoriosController : Controller
     {
         // GET: Relatorios
