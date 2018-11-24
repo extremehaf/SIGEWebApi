@@ -308,11 +308,19 @@ md = {
 
 
       /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
-
+        var jqxhr = jQuery.get("https://sigemv.azurewebsites.net/api/EventosClasses", function () {
+        }).done(function (data) {
+            console.log(data);
+            debugger;
+            var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            $.each(data, function (i, val) {
+                var data = new Date(val.data);
+                meses[data.getMonth()] = meses[data.getMonth()] + 1;
+            });
       var dataWebsiteViewsChart = {
         labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
         series: [
-          [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+            meses
 
         ]
       };
@@ -321,7 +329,7 @@ md = {
           showGrid: false
         },
         low: 0,
-        high: 1000,
+        high: 10,
         chartPadding: {
           top: 0,
           right: 5,
@@ -342,7 +350,10 @@ md = {
       var websiteViewsChart = Chartist.Bar('#websiteViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
 
       //start animation for the Emails Subscription Chart
-      md.startAnimationForBarChart(websiteViewsChart);
+            md.startAnimationForBarChart(websiteViewsChart);
+            }).fail(function (data) {
+                console.log(data);
+            });
     }
   },
 
