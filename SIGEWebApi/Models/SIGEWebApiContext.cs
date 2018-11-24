@@ -22,5 +22,7 @@ namespace SIGEWebApi.Models
         public System.Data.Entity.DbSet<SIGEWebApi.Models.Funcionario> Funcionarios { get; set; }
 
         public System.Data.Entity.DbSet<SIGEWebApi.Models.HorasTrabalhadas> HorasTrabalhadas { get; set; }
+
+        public System.Data.Entity.DbSet<SIGEWebApi.Models.Treinamento> Treinamentos { get; set; }
     }
 }
