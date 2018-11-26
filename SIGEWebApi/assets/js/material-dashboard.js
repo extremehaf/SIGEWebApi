@@ -110,7 +110,7 @@ $(document).ready(function () {
         });
     });
 
-    var jqxhr = jQuery.get("http://trabalhosige.azurewebsites.net/api/Conta_Pagar", function () {
+    var jqxhr = jQuery.get("https://trabalhosige.azurewebsites.net/api/Conta_Pagar", function () {
     }).done(function (data) {
 
         var valorTotal = 0;
