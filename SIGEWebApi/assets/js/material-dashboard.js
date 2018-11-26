@@ -92,10 +92,10 @@ $(document).ready(function () {
         });
 
         $("#totalVendas").html("R$" + valorTotal.toFixed(2));
-        });
+    });
 
     var jqxhr = jQuery.get("https://sigerh.azurewebsites.net/api/Funcionarios", function () {
-    }).done(function (data) {       
+    }).done(function (data) {
         $("#bodyFuncionario").html("");
         $.each(data, function (i, val) {
             var tr = $("<tr\>");
@@ -107,15 +107,14 @@ $(document).ready(function () {
             tr.append($("<td>").append(val.Cargo));
             tr.append($("<td>").append(val.Turno));
             $("#bodyFuncionario").append(tr);
-        }); 
         });
+    });
 
     var jqxhr = jQuery.get("http://trabalhosige.azurewebsites.net/api/Conta_Pagar", function () {
     }).done(function (data) {
-        
+
         var valorTotal = 0;
         $.each(data, function (i, val) {
-            debugger;
             if (val.setor == "Recursos Humanos") {
                 $.each(val.ContasPagar, function (j, _val) {
                     var mes = new Date(_val.vencimento).getMonth()
@@ -300,36 +299,37 @@ md = {
         if ($('#dailySalesChart').length != 0 || $('#completedTasksChart').length != 0 || $('#websiteViewsChart').length != 0) {
             /* ----------==========     Daily Sales Chart initialization    ==========---------- */
             var jqxhr = jQuery.get("https://sigemv.azurewebsites.net/api/Vendas", function () {
-            }).done(function (data) {
-                var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                $.each(data, function (i, val) {
-                    var data = new Date(val.data);
-                    meses[data.getMonth()] = meses[data.getMonth()] + 1;
+            })
+                .done(function (data) {
+                    var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    $.each(data, function (i, val) {
+                        var data = new Date(val.data);
+                        meses[data.getMonth()] = meses[data.getMonth()] + 1;
+                    });
+                    dataDailySalesChart = {
+                        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                        series: [meses]
+                    };
+
+                    optionsDailySalesChart = {
+                        lineSmooth: Chartist.Interpolation.cardinal({
+                            tension: 0
+                        }),
+                        low: 0,
+                        high: 10, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                        chartPadding: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        },
+                    }
+
+                    var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+
+                    md.startAnimationForLineChart(dailySalesChart);
+
                 });
-                dataDailySalesChart = {
-                    labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-                    series: [meses]
-                };
-
-                optionsDailySalesChart = {
-                    lineSmooth: Chartist.Interpolation.cardinal({
-                        tension: 0
-                    }),
-                    low: 0,
-                    high: 10, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-                    chartPadding: {
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0
-                    },
-                }
-
-                var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
-
-                md.startAnimationForLineChart(dailySalesChart);
-
-            });
 
             /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
 
@@ -403,6 +403,88 @@ md = {
             })
                 .fail(function (data) {
                     console.log(data);
+                });
+
+
+
+            /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
+            var jqxhr = jQuery.get("https://sigerh.azurewebsites.net/api/Treinamentos", function () {
+            }).done(function (data) {
+                console.log(data);
+                debugger;
+                var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                $.each(data, function (i, val) {
+                    var data = new Date(val.Data);
+                    meses[data.getMonth()] = meses[data.getMonth()] + 1;
+                });
+                var dataWebsiteViewsChart = {
+                    labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                    series: [meses]
+                };
+                var optionsWebsiteViewsChart = {
+                    axisX: {
+                        showGrid: false
+                    },
+                    low: 0,
+                    high: 10,
+                    chartPadding: {
+                        top: 0,
+                        right: 5,
+                        bottom: 0,
+                        left: 0
+                    }
+                };
+                var responsiveOptions = [
+                    ['screen and (max-width: 640px)', {
+                        seriesBarDistance: 5,
+                        axisX: {
+                            labelInterpolationFnc: function (value) {
+                                return value[0];
+                            }
+                        }
+                    }]
+                ];
+                var websiteViewsChart1 = Chartist.Bar('#trenamentosMes', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
+
+                //start animation for the Emails Subscription Chart
+                md.startAnimationForBarChart(websiteViewsChart1);
+                })
+                .fail(function (data) {
+                    console.log(data);
+                });
+
+            /* ----------==========     Daily Sales Chart initialization    ==========---------- */
+            var jqxhr = jQuery.get("https://sigerh.azurewebsites.net/api/Treinamentos", function () {
+            })
+                .done(function (data) {
+                    var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    $.each(data, function (i, val) {
+                        var data = new Date(val.Data);
+                        meses[data.getMonth()] = parseFloat(val.custo);
+                    });
+                    dataDailySalesChart = {
+                        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                        series: [meses]
+                    };
+
+                    optionsDailySalesChart = {
+                        lineSmooth: Chartist.Interpolation.cardinal({
+                            tension: 0
+                        }),
+                        low: 0,
+                        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                        chartPadding: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        },
+                    }
+
+                    var dailySalesChart = new Chartist.Line('#custoTrenamentosMes', dataDailySalesChart, optionsDailySalesChart);
+
+                    md.startAnimationForLineChart(dailySalesChart);
+
                 });
         }
     },
