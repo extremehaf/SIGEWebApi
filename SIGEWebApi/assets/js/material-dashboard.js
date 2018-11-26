@@ -107,9 +107,28 @@ $(document).ready(function () {
             tr.append($("<td>").append(val.Cargo));
             tr.append($("<td>").append(val.Turno));
             $("#bodyFuncionario").append(tr);
+        }); 
         });
 
+    var jqxhr = jQuery.get("http://trabalhosige.azurewebsites.net/api/Conta_Pagar", function () {
+    }).done(function (data) {
         
+        var valorTotal = 0;
+        $.each(data, function (i, val) {
+            debugger;
+            if (val.setor == "Recursos Humanos") {
+                $.each(val.ContasPagar, function (j, _val) {
+                    var mes = new Date(_val.vencimento).getMonth()
+                    if (mes == new Date().getMonth()) {
+                        valorTotal += _val.valor;
+                    }
+                });
+            }
+        });
+
+        $("#gastosRH").html("R$ " + valorTotal.toFixed(2));
+
+
     });
 
 
