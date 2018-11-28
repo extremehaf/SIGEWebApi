@@ -209,6 +209,9 @@
     <Compile Include="Controllers\RelatoriosController.cs" />
     <Compile Include="Controllers\TreinamentoesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DAL\IntegracaoFinanceiro.cs" />
+    <Compile Include="DAL\IntegracaoProducao.cs" />
+    <Compile Include="DAL\IntegracaoVendas.cs" />
     <Compile Include="Filters\ApiMessageError.cs" />
     <Compile Include="Filters\BasicAuthenticationFilter.cs" />
     <Compile Include="Filters\UnhandledExceptionFilter.cs" />
@@ -527,7 +530,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="DAL\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
