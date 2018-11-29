@@ -19,12 +19,21 @@ namespace SIGEWebApi.Controllers
         private SIGEWebApiContext db = new SIGEWebApiContext();
 
         // GET: api/Treinamentos
+        /// <summary>
+        /// retorna todos os treinamentos 
+        /// </summary>
+        /// <returns></returns>
         public IQueryable<Treinamento> GetTreinamentos()
         {
             return db.Treinamentos;
         }
 
         // GET: api/Treinamentos/5
+        /// <summary>
+        /// retorna um treinamento especifico 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ResponseType(typeof(Treinamento))]
         public async Task<IHttpActionResult> GetTreinamento(int id)
         {
@@ -38,6 +47,12 @@ namespace SIGEWebApi.Controllers
         }
 
         // PUT: api/Treinamentos/5
+        /// <summary>
+        /// Atualiza um treinamento
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="treinamento"></param>
+        /// <returns></returns>
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutTreinamento(int id, Treinamento treinamento)
         {
@@ -73,6 +88,11 @@ namespace SIGEWebApi.Controllers
         }
 
         // POST: api/Treinamentos
+        /// <summary>
+        /// Cria um treinamento
+        /// </summary>
+        /// <param name="treinamento"></param>
+        /// <returns></returns>
         [ResponseType(typeof(Treinamento))]
         public async Task<IHttpActionResult> PostTreinamento(Treinamento treinamento)
         {
@@ -88,6 +108,11 @@ namespace SIGEWebApi.Controllers
         }
 
         // DELETE: api/Treinamentos/5
+        /// <summary>
+        /// Deleta um treinamento
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ResponseType(typeof(Treinamento))]
         public async Task<IHttpActionResult> DeleteTreinamento(int id)
         {

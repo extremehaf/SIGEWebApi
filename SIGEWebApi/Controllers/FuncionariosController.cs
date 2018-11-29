@@ -20,12 +20,32 @@ namespace SIGEWebApi.Controllers
         private SIGEWebApiContext db = new SIGEWebApiContext();
 
         // GET: api/Funcionarios
+        /// <summary>
+        /// Lista todos os funcionarios 
+        /// </summary>
+        /// <returns></returns>
         public IQueryable<Funcionario> GetFuncionarios()
         {
             return db.Funcionarios.Include(h => h.HorasTrabalhadas);
         }
+        // GET: api/Funcionarios
+        /// <summary>
+        /// Lista todos os funcionarios por turno 
+        /// </summary>
+        /// <param name="turno">Matutino ou Noturno</param>
+        /// <returns></returns>
+        [ResponseType(typeof(IQueryable<Funcionario>))]
+        public IQueryable<Funcionario> GetFuncionarios(string turno)
+        {
+            return db.Funcionarios.Include(h => h.HorasTrabalhadas).Where(f => f.Turno == turno);
+        }
 
         // GET: api/Funcionarios/5
+        /// <summary>
+        /// Lista um funcionario especifico
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ResponseType(typeof(Funcionario))]
         [BasicAuthenticationFilter(false)]
         public async Task<IHttpActionResult> GetFuncionario(int id)
@@ -40,6 +60,12 @@ namespace SIGEWebApi.Controllers
         }
 
         // PUT: api/Funcionarios/5
+        /// <summary>
+        /// Atualiza um funcionario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="funcionario"></param>
+        /// <returns></returns>
         [ResponseType(typeof(void))]
         [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PutFuncionario(int id, Funcionario funcionario)
@@ -76,6 +102,11 @@ namespace SIGEWebApi.Controllers
         }
 
         // POST: api/Funcionarios
+        /// <summary>
+        /// Cadastra um funcionario
+        /// </summary>
+        /// <param name="funcionario"></param>
+        /// <returns></returns>
         [ResponseType(typeof(Funcionario))]
         [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PostFuncionario(Funcionario funcionario)
@@ -92,6 +123,11 @@ namespace SIGEWebApi.Controllers
         }
 
         // DELETE: api/Funcionarios/5
+        /// <summary>
+        /// Deleta um funcionario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ResponseType(typeof(Funcionario))]
         [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> DeleteFuncionario(int id)
