@@ -24,6 +24,7 @@ namespace SIGEWebApi.Controllers
         /// Lista todos os funcionarios 
         /// </summary>
         /// <returns></returns>
+        [BasicAuthenticationFilter(false)]
         public IQueryable<Funcionario> GetFuncionarios()
         {
             return db.Funcionarios.Include(h => h.HorasTrabalhadas);
@@ -35,6 +36,7 @@ namespace SIGEWebApi.Controllers
         /// <param name="turno">Matutino ou Noturno</param>
         /// <returns></returns>
         [ResponseType(typeof(IQueryable<Funcionario>))]
+        [BasicAuthenticationFilter(false)]
         public IQueryable<Funcionario> GetFuncionarios(string turno)
         {
             return db.Funcionarios.Include(h => h.HorasTrabalhadas).Where(f => f.Turno == turno);

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using SIGEWebApi.Filters;
 using SIGEWebApi.Models;
 
 namespace SIGEWebApi.Controllers
@@ -51,6 +52,7 @@ namespace SIGEWebApi.Controllers
         }
         // PUT: api/HorasTrabalhadas/5
         [ResponseType(typeof(void))]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PutHorasTrabalhadas(int id, HorasTrabalhadas horasTrabalhadas)
         {
             if (!ModelState.IsValid)
@@ -86,6 +88,7 @@ namespace SIGEWebApi.Controllers
 
         // POST: api/HorasTrabalhadas
         [ResponseType(typeof(HorasTrabalhadas))]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PostHorasTrabalhadas(HorasTrabalhadas horasTrabalhadas)
         {
             if (!ModelState.IsValid)
@@ -101,6 +104,7 @@ namespace SIGEWebApi.Controllers
 
         // DELETE: api/HorasTrabalhadas/5
         [ResponseType(typeof(HorasTrabalhadas))]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> DeleteHorasTrabalhadas(int id)
         {
             HorasTrabalhadas horasTrabalhadas = await db.HorasTrabalhadas.FindAsync(id);

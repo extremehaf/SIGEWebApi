@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using SIGEWebApi.Filters;
 using SIGEWebApi.Models;
 
 namespace SIGEWebApi.Controllers
@@ -23,6 +24,7 @@ namespace SIGEWebApi.Controllers
         /// retorna todos os treinamentos 
         /// </summary>
         /// <returns></returns>
+        [BasicAuthenticationFilter(false)]
         public IQueryable<Treinamento> GetTreinamentos()
         {
             return db.Treinamentos;
@@ -35,6 +37,7 @@ namespace SIGEWebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ResponseType(typeof(Treinamento))]
+        [BasicAuthenticationFilter(false)]
         public async Task<IHttpActionResult> GetTreinamento(int id)
         {
             Treinamento treinamento = await db.Treinamentos.FindAsync(id);
@@ -54,6 +57,7 @@ namespace SIGEWebApi.Controllers
         /// <param name="treinamento"></param>
         /// <returns></returns>
         [ResponseType(typeof(void))]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PutTreinamento(int id, Treinamento treinamento)
         {
             if (!ModelState.IsValid)
@@ -94,6 +98,7 @@ namespace SIGEWebApi.Controllers
         /// <param name="treinamento"></param>
         /// <returns></returns>
         [ResponseType(typeof(Treinamento))]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> PostTreinamento(Treinamento treinamento)
         {
             if (!ModelState.IsValid)
@@ -114,6 +119,7 @@ namespace SIGEWebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ResponseType(typeof(Treinamento))]
+        [BasicAuthenticationFilter(true)]
         public async Task<IHttpActionResult> DeleteTreinamento(int id)
         {
             Treinamento treinamento = await db.Treinamentos.FindAsync(id);
