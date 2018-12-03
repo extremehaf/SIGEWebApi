@@ -85,14 +85,17 @@ $(document).ready(function () {
 
     var jqxhr = jQuery.get("https://sigemv.azurewebsites.net/api/Vendas", function () {
     }).done(function (data) {
-        var valorTotal = 0;
-        $.each(data, function (i, val) {
-            var valor = parseFloat(val.valor);
-            valorTotal += valor;
-        });
+            var valorTotal = 0;
+            $.each(data, function (i, val) {
+                var valor = parseFloat(val.valor);
+                valorTotal += valor;
+            });
 
-        $("#totalVendas").html("R$" + valorTotal.toFixed(2));
-    });
+            $("#totalVendas").html("R$" + valorTotal.toFixed(2));
+        })
+        .fail(function (data) {
+            console.log(data);
+        });
 
     var jqxhr = jQuery.get("https://sigerh.azurewebsites.net/api/Funcionarios", function () {
     }).done(function (data) {
@@ -108,17 +111,19 @@ $(document).ready(function () {
             tr.append($("<td>").append(val.Turno));
             $("#bodyFuncionario").append(tr);
         });
+    }).fail(function (data) {
+        console.log(data);
     });
 
     var jqxhr = jQuery.get("https://trabalhosige.azurewebsites.net/api/Conta_Pagar", function () {
     }).done(function (data) {
-
+        debugger;
         var valorTotal = 0;
         $.each(data, function (i, val) {
             if (val.setor == "Recursos Humanos") {
                 $.each(val.ContasPagar, function (j, _val) {
                     var mes = new Date(_val.vencimento).getMonth()
-                    if (mes == new Date().getMonth()) {
+                    if (mes == new Date().getMonth() || mes == (new Date().getMonth() - 1)) {
                         valorTotal += _val.valor;
                     }
                 });
@@ -126,9 +131,10 @@ $(document).ready(function () {
         });
 
         $("#gastosRH").html("R$ " + valorTotal.toFixed(2));
-
-
-    });
+    })
+        .fail(function (data) {
+            console.log(data);
+        });
 
 
 });
@@ -299,8 +305,7 @@ md = {
         if ($('#dailySalesChart').length != 0 || $('#completedTasksChart').length != 0 || $('#websiteViewsChart').length != 0) {
             /* ----------==========     Daily Sales Chart initialization    ==========---------- */
             var jqxhr = jQuery.get("https://sigemv.azurewebsites.net/api/Vendas", function () {
-            })
-                .done(function (data) {
+            }).done(function (data) {
                     var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     $.each(data, function (i, val) {
                         var data = new Date(val.data);
@@ -332,36 +337,110 @@ md = {
                 });
 
             /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
+            var jqxhr = jQuery.get("https://sigepm.azurewebsites.net/getAllProducaoPorMes", function () {
+            })
+                .done(function (data) {
+                    var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    $.each(data, function (i, val) {
+                        var data = new Date(val.data);
+                        switch (val.mes.trim()) {
+                            case "Janeiro":
+                                meses[0] += meses[0] + parseInt(val.quantidade);
+                                break;
+                            case "Fevereiro":
+                                break;
+                                meses[1] += meses[1] + parseInt(val.quantidade);
+                            case "Março":
+                                meses[2] += meses[2] + parseInt(val.quantidade);
+                                break;
+                            case "Abril":
+                                meses[3] += meses[3] + parseInt(val.quantidade);
+                                break;
+                            case "Maio":
+                                meses[4] += meses[4] + parseInt(val.quantidade);
+                                break;
+                            case "Junho ":
+                                meses[5] += meses[5] + parseInt(val.quantidade);
+                                break;
+                            case "Julho":
+                                meses[6] += meses[6] + parseInt(val.quantidade);
+                                break;
+                            case "Agosto":
+                                meses[7] += meses[7] + parseInt(val.quantidade);
+                                break;
+                            case "Setembro":
+                                meses[8] += meses[8] + parseInt(val.quantidade);
+                                break;
+                            case "Outubro":
+                                meses[9] += meses[9] + parseInt(val.quantidade);
+                                break;
+                            case "Novembro":
+                                meses[10] += meses[10] + parseInt(val.quantidade);
+                                break;
+                            case "Dezembro":
+                                meses[11] += meses[11] + parseInt(val.quantidade);
+                                break;
 
-            dataCompletedTasksChart = {
-                labels: ['12p', '3p', '6p', '9p', '12p', '3a', '6a', '9a'],
-                series: [
-                    [230, 750, 450, 300, 280, 240, 200, 190]
-                ]
-            };
+                        }
+                        //meses[data.getMonth()] = meses[data.getMonth()] + 1;
+                    });
+                    dataCompletedTasksChart = {
+                        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                        series: [meses]
+                    };
 
-            optionsCompletedTasksChart = {
-                lineSmooth: Chartist.Interpolation.cardinal({
-                    tension: 0
-                }),
-                low: 0,
-                high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-                chartPadding: {
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0
-                }
-            }
+                    optionsCompletedTasksChart = {
+                        lineSmooth: Chartist.Interpolation.cardinal({
+                            tension: 0
+                        }),
+                        low: 0,
+                        high: 200, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                        chartPadding: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        }
+                    }
 
-            var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
+                    var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
 
-            // start animation for the Completed Tasks Chart - Line Chart
-            md.startAnimationForLineChart(completedTasksChart);
+                    // start animation for the Completed Tasks Chart - Line Chart
+                    md.startAnimationForLineChart(completedTasksChart);
+
+                })
+                .fail(function (data) {
+                    var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    dataCompletedTasksChart = {
+                        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                        series: [meses]
+                    };
+
+                    optionsCompletedTasksChart = {
+                        lineSmooth: Chartist.Interpolation.cardinal({
+                            tension: 0
+                        }),
+                        low: 0,
+                        high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                        chartPadding: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        }
+                    }
+
+                    var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
+
+                    // start animation for the Completed Tasks Chart - Line Chart
+                    md.startAnimationForLineChart(completedTasksChart);
+                });
+
+
 
 
             /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
-            var jqxhr = jQuery.get("https://sigemv.azurewebsites.net/api/EventosClasses", function () {
+            var jqxhr = jQuery.get("https://sigemv.azurewebsites.net/api/Eventos", function () {
             }).done(function (data) {
                 console.log(data);
                 var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -403,6 +482,38 @@ md = {
             })
                 .fail(function (data) {
                     console.log(data);
+
+                    var dataWebsiteViewsChart = {
+                        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                        series: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    };
+                    var optionsWebsiteViewsChart = {
+                        axisX: {
+                            showGrid: false
+                        },
+                        low: 0,
+                        high: 10,
+                        chartPadding: {
+                            top: 0,
+                            right: 5,
+                            bottom: 0,
+                            left: 0
+                        }
+                    };
+                    var responsiveOptions = [
+                        ['screen and (max-width: 640px)', {
+                            seriesBarDistance: 5,
+                            axisX: {
+                                labelInterpolationFnc: function (value) {
+                                    return value[0];
+                                }
+                            }
+                        }]
+                    ];
+                    var websiteViewsChart = Chartist.Bar('#websiteViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
+
+                    //start animation for the Emails Subscription Chart
+                    md.startAnimationForBarChart(websiteViewsChart);
                 });
 
 
@@ -411,7 +522,6 @@ md = {
             var jqxhr = jQuery.get("https://sigerh.azurewebsites.net/api/Treinamentos", function () {
             }).done(function (data) {
                 console.log(data);
-                debugger;
                 var meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 $.each(data, function (i, val) {
                     var data = new Date(val.Data);
@@ -448,9 +558,40 @@ md = {
 
                 //start animation for the Emails Subscription Chart
                 md.startAnimationForBarChart(websiteViewsChart1);
-                })
+            })
                 .fail(function (data) {
                     console.log(data);
+                    var dataWebsiteViewsChart = {
+                        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                        series: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    };
+                    var optionsWebsiteViewsChart = {
+                        axisX: {
+                            showGrid: false
+                        },
+                        low: 0,
+                        high: 10,
+                        chartPadding: {
+                            top: 0,
+                            right: 5,
+                            bottom: 0,
+                            left: 0
+                        }
+                    };
+                    var responsiveOptions = [
+                        ['screen and (max-width: 640px)', {
+                            seriesBarDistance: 5,
+                            axisX: {
+                                labelInterpolationFnc: function (value) {
+                                    return value[0];
+                                }
+                            }
+                        }]
+                    ];
+                    var websiteViewsChart1 = Chartist.Bar('#trenamentosMes', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
+
+                    //start animation for the Emails Subscription Chart
+                    md.startAnimationForBarChart(websiteViewsChart1);
                 });
 
             /* ----------==========     Daily Sales Chart initialization    ==========---------- */
@@ -472,7 +613,7 @@ md = {
                             tension: 0
                         }),
                         low: 0,
-                        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                        high: 11000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
                         chartPadding: {
                             top: 0,
                             right: 0,
@@ -485,6 +626,31 @@ md = {
 
                     md.startAnimationForLineChart(dailySalesChart);
 
+                })
+                .fail(function (data) {
+                    console.log(data);
+                    dataDailySalesChart = {
+                        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+                        series: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    };
+
+                    optionsDailySalesChart = {
+                        lineSmooth: Chartist.Interpolation.cardinal({
+                            tension: 0
+                        }),
+                        low: 0,
+                        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                        chartPadding: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        },
+                    }
+
+                    var dailySalesChart = new Chartist.Line('#custoTrenamentosMes', dataDailySalesChart, optionsDailySalesChart);
+
+                    md.startAnimationForLineChart(dailySalesChart);
                 });
         }
     },
