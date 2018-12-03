@@ -1,6 +1,10 @@
-﻿using System;
+﻿using SIGEWebApi.DAL;
+using SIGEWebApi.DTO;
+using SIGEWebApi.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Cors;
 using System.Web.Mvc;
@@ -10,9 +14,14 @@ namespace SIGEWebApi.Controllers
     public class RelatoriosController : Controller
     {
         // GET: Relatorios
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            RelatoriosViewModel retorno = new RelatoriosViewModel();
+            var lstRetorno = await IntegracaoProducao.GetAsync("getAllProducaoPorMesTurno");
+            IEnumerable<IGrouping<string, InformacaoProducaoDTO>> agrupado = lstRetorno.GroupBy(i => i.mes);
+            retorno.listaInformacoesProducao = agrupado;
+
+            return View(retorno);
         }
 
         // GET: Relatorios/Details/5

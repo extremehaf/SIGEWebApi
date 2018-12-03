@@ -1,4 +1,4 @@
-﻿
+﻿@model SIGEWebApi.ViewModels.RelatoriosViewModel
 @{
     ViewBag.Title = "Relatorios";
 }
@@ -40,7 +40,7 @@
     <div class="col-lg-12 col-md-12">
         <div class="card">
             <div class="card-header card-header-warning">
-                <h4 class="card-title">Employees Stats</h4>
+                <h4 class="card-title">Produção</h4>
                 <p class="card-category">Producao por turno</p>
             </div>
             <div class="card-body table-responsive">
@@ -56,27 +56,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td rowspan="3">Janeiro</td>
-                            <td>Manhã </td>
-                            <td>88</td>
-                            <td>333</td>
-                            <td rowspan="3">1646</td>
-                            <td>51</td>
-                        </tr>
-                        <tr>
-                            <td>Tarde </td>
-                            <td>660</td>
-                            <td>43</td>
-                            <td>43</td>
-                        </tr>
-                        <tr>
-                            <td>Note </td>
-                            <td>199</td>
-                            <td>31</td>
-                            <td>31</td>
-                        </tr>
-                        <tr>
+                        @foreach (var item in Model.listaInformacoesProducao)
+                        {
+                            <tr>
+                                <td rowspan="3">@item.Key</td>
+                                <td>@item.Where(y => y.turno == "manhã").Select(x => x.turno)</td>
+                                <td>88</td>
+                                <td>333</td>
+                                <td rowspan="3">1646</td>
+                                <td>51</td>
+                            </tr>
+                            <tr>
+                                <td>Tarde </td>
+                                <td>660</td>
+                                <td>43</td>
+                                <td>43</td>
+                            </tr>
+                            <tr>
+                                <td>Note </td>
+                                <td>199</td>
+                                <td>31</td>
+                                <td>31</td>
+                            </tr>
+                        }
+
+                        @*<tr>
                             <td rowspan="3">Fevereiro </td>
                             <td>Manhã </td>
                             <td>39</td>
@@ -115,7 +119,7 @@
                             <td>585</td>
                             <td>63</td>
                             <td>63</td>
-                        </tr>
+                        </tr>*@
                     </tbody>
                 </table>
 

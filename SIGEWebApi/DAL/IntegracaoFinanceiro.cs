@@ -27,6 +27,13 @@ namespace SIGEWebApi.DAL
         static async Task<Object> GetProductAsync(string path)
         {
             Object product = null;
+            client.BaseAddress = new Uri("http://sigepm.azurewebsites.net/");
+            //client.BaseAddress = new Uri("http://trabalhosige.azurewebsites.net");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+
             HttpResponseMessage response = await client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
