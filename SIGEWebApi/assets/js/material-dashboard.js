@@ -83,18 +83,20 @@ $(document).ready(function () {
         }
     });
 
-    var jqxhr = jQuery.get("https://sigemv.azurewebsites.net/api/Vendas", function () {
+    var jqxhr = jQuery.get("http://sigemv.azurewebsites.net/Faturamento", function () {
     }).done(function (data) {
-            var valorTotal = 0;
-            $.each(data, function (i, val) {
-                var valor = parseFloat(val.valor);
-                valorTotal += valor;
-            });
+            
+        var valorTotal = parseFloat(data);
+            //$.each(data, function (i, val) {
+            //    var valor = parseFloat(val.valor);
+            //    valorTotal += valor;
+            //});
 
-            $("#totalVendas").html("R$" + valorTotal.toFixed(2));
+            $("#totalVendas").html("R$" + valorTotal.toFixed(1));
         })
         .fail(function (data) {
             console.log(data);
+            $("#totalVendas").html("R$ 0,00");
         });
 
     var jqxhr = jQuery.get("https://sigerh.azurewebsites.net/api/Funcionarios", function () {
@@ -133,6 +135,7 @@ $(document).ready(function () {
     })
         .fail(function (data) {
             console.log(data);
+            $("#gastosRH").html("R$ 0,00");
         });
 
 
