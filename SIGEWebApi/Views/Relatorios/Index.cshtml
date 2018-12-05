@@ -1,6 +1,10 @@
-﻿@model SIGEWebApi.ViewModels.RelatoriosViewModel
+﻿@using SIGEWebApi.DTO
+@model SIGEWebApi.ViewModels.RelatoriosViewModel
 @{
     ViewBag.Title = "Relatorios";
+    var informacoesFinanceiroManha = new InformacaoFinanceiroDTO();
+    var informacoesFinanceiroNoite = new InformacaoFinanceiroDTO();
+    var informacoesFinanceiroTarde = new InformacaoFinanceiroDTO();
 }
 
 <h2>Relatorios</h2>
@@ -56,70 +60,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.listaInformacoesProducao)
+                        @for (var i = 0; i < Model.listaInformacoesProducao.Count; i++)
                         {
+                          
                             <tr>
-                                <td rowspan="3">@item.Key</td>
-                                <td>@item.Where(y => y.turno == "manhã").Select(x => x.turno)</td>
-                                <td>88</td>
-                                <td>333</td>
-                                <td rowspan="3">1646</td>
+                                <td rowspan="3">@Model.listaInformacoesProducao[i].Key</td>
+                                <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno.Contains("Manhã")).FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Manhã").FirstOrDefault().turno : "--")</td>
+                                <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno.Contains("Manhã")).FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Manhã").FirstOrDefault().quantidade.ToString() : "--") </td>
+                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Manhã")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Manhã")).FirstOrDefault().valor.ToString() : "--") </td>
+                                <td rowspan="3"> @(Model.listaInformacoesDeptoVendas.Where(x => x.MesCorrente == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).ToList().Count )</td>
                                 <td>51</td>
                             </tr>
                             <tr>
-                                <td>Tarde </td>
-                                <td>660</td>
-                                <td>43</td>
+                                <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault().turno : "--")</td>
+                                <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault().quantidade.ToString() : "--")</td>
+                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Tarde")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Tarde")).FirstOrDefault().valor.ToString() : "--")</td>
                                 <td>43</td>
                             </tr>
                             <tr>
-                                <td>Note </td>
-                                <td>199</td>
-                                <td>31</td>
+                                <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault().turno : "--")</td>
+                                <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault().quantidade.ToString() : "--")</td>
+                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Noite")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Noite")).FirstOrDefault().valor.ToString() : "--")</td>
                                 <td>31</td>
                             </tr>
                         }
-
-                        @*<tr>
-                            <td rowspan="3">Fevereiro </td>
-                            <td>Manhã </td>
-                            <td>39</td>
-                            <td>380</td>
-                            <td rowspan="3">1664</td>
-                            <td>9</td>
-                        </tr>
-                        <tr>
-                            <td>Tarde </td>
-                            <td>858</td>
-                            <td>1</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>Note </td>
-                            <td>361</td>
-                            <td>92</td>
-                            <td>92</td>
-                        </tr>
-                        <tr>
-                            <td class="tg-baqh" rowspan="3">Março</td>
-                            <td>Manhã </td>
-                            <td>20</td>
-                            <td>604</td>
-                            <td rowspan="3">1666</td>
-                            <td>57</td>
-                        </tr>
-                        <tr>
-                            <td>Tarde </td>
-                            <td>184</td>
-                            <td>24</td>
-                            <td>24</td>
-                        </tr>
-                        <tr>
-                            <td>Note </td>
-                            <td>585</td>
-                            <td>63</td>
-                            <td>63</td>
-                        </tr>*@
                     </tbody>
                 </table>
 

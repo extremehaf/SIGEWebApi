@@ -117,7 +117,6 @@ $(document).ready(function () {
 
     var jqxhr = jQuery.get("https://trabalhosige.azurewebsites.net/api/Conta_Pagar", function () {
     }).done(function (data) {
-        debugger;
         var valorTotal = 0;
         $.each(data, function (i, val) {
             if (val.setor == "Recursos Humanos") {

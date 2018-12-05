@@ -8,6 +8,9 @@ namespace SIGEWebApi.ViewModels
 {
     public class RelatoriosViewModel
     {
-        public IEnumerable<IGrouping<string, InformacaoProducaoDTO>> listaInformacoesProducao { get; set; }
+        public List<IGrouping<string, InformacaoProducaoDTO>> listaInformacoesProducao { get; set; }
+        public List<InformacaoFinanceiroDTO> listaInformacoesFinanceiro { get; set; }
+
+        public List<InformacaoVendasDTO> listaInformacoesDeptoVendas { get; set; }
     }
 }

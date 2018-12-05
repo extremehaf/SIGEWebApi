@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SIGEWebApi.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -24,14 +25,27 @@ namespace SIGEWebApi.DAL
             return response.Headers.Location;
         }
 
-        static async Task<Object> GetProductAsync(string path)
+        public static async Task<List<InformacaoVendasDTO>> GetAsync(string path)
         {
-            Object product = null;
-            HttpResponseMessage response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
+            List<InformacaoVendasDTO> product = new List<InformacaoVendasDTO>();
+
+            client.BaseAddress = new Uri("http://sigemv.azurewebsites.net/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            try
             {
-                product = await response.Content.ReadAsAsync<Object>();
+                HttpResponseMessage response = await client.GetAsync(path);
+                if (response.IsSuccessStatusCode)
+                {
+                    product = await response.Content.ReadAsAsync<List<InformacaoVendasDTO>>();
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+            
             return product;
         }
 
@@ -80,7 +94,7 @@ namespace SIGEWebApi.DAL
                 Console.WriteLine($"Created at {url}");
 
                 // Get the product
-                product = await GetProductAsync(url.PathAndQuery);
+                product = await GetAsync(url.PathAndQuery);
 
                 // Update the product
                 Console.WriteLine("Updating price...");
@@ -88,7 +102,7 @@ namespace SIGEWebApi.DAL
                 await UpdateProductAsync(product);
 
                 // Get the updated product
-                product = await GetProductAsync(url.PathAndQuery);
+                product = await GetAsync(url.PathAndQuery);
 
 
                 // Delete the product

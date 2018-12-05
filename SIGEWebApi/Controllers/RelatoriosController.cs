@@ -17,11 +17,67 @@ namespace SIGEWebApi.Controllers
         public async Task<ActionResult> Index()
         {
             RelatoriosViewModel retorno = new RelatoriosViewModel();
-            var lstRetorno = await IntegracaoProducao.GetAsync("getAllProducaoPorMesTurno");
-            IEnumerable<IGrouping<string, InformacaoProducaoDTO>> agrupado = lstRetorno.GroupBy(i => i.mes);
-            retorno.listaInformacoesProducao = agrupado;
+            await BuscarDadosProducao(retorno);
+
+            retorno.listaInformacoesFinanceiro = await BuscarDadosFinanceiro();
+            retorno.listaInformacoesDeptoVendas = await BuscarDadosDeptoVendas();
 
             return View(retorno);
+        }
+
+        private static async Task BuscarDadosProducao(RelatoriosViewModel retorno)
+        {
+            var lstRetorno = await IntegracaoProducao.GetAsync("getAllProducaoPorMesTurno");
+            List<IGrouping<string, InformacaoProducaoDTO>> agrupado = lstRetorno.GroupBy(i => i.mes).ToList();
+
+
+            retorno.listaInformacoesProducao = agrupado;
+        }
+
+        private static async Task<List<InformacaoFinanceiroDTO>> BuscarDadosFinanceiro()
+        {
+            var lstRetorno = await IntegracaoFinanceiro.GetAsync("api/GastosProducao");
+
+            return lstRetorno;
+        }
+
+        private static async Task<List<InformacaoVendasDTO>> BuscarDadosDeptoVendas()
+        {
+            var lstRetorno = await IntegracaoVendas.GetAsync("api/Vendas");
+
+            return lstRetorno;
+        }
+
+        private static int ConverterMesToInt(string mes)
+        {
+            switch (mes.ToLower().Trim())
+            {
+                case "janeiro":
+                    return 1;
+                case "fevereiro":
+                    return 2;
+                case "março":
+                    return 3;
+                case "abril":
+                    return 4;
+                case "maio":
+                    return 5;
+                case "junho":
+                    return 6;
+                case "julho":
+                    return 7;
+                case "agosto":
+                    return 8;
+                case "setembro":
+                    return 9;
+                case "outubro":
+                    return 10;
+                case "novembro":
+                    return 11;
+                case "dezembro":
+                    return 12;
+                default: return 0;
+            }
         }
 
         // GET: Relatorios/Details/5
