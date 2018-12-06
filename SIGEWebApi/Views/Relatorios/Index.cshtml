@@ -1,4 +1,5 @@
 ﻿@using SIGEWebApi.DTO
+@using SIGEWebApi.Controllers
 @model SIGEWebApi.ViewModels.RelatoriosViewModel
 @{
     ViewBag.Title = "Relatorios";
@@ -16,7 +17,7 @@
         var dadosFin = null;
 
         buscarDadosVenda();
-        
+
     });
 
 
@@ -56,32 +57,31 @@
                             <th>Qnt&nbsp;&nbsp;produzida </th>
                             <th>Gasto </th>
                             <th>Total de vendas </th>
-                            <th>Qnt Atrasos no mês </th>
+                            <th>Horas Totais Trabalhadas no Mês </th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (var i = 0; i < Model.listaInformacoesProducao.Count; i++)
                         {
-                          
                             <tr>
                                 <td rowspan="3">@Model.listaInformacoesProducao[i].Key</td>
                                 <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno.Contains("Manhã")).FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Manhã").FirstOrDefault().turno : "--")</td>
                                 <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno.Contains("Manhã")).FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Manhã").FirstOrDefault().quantidade.ToString() : "--") </td>
-                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Manhã")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Manhã")).FirstOrDefault().valor.ToString() : "--") </td>
-                                <td rowspan="3"> @(Model.listaInformacoesDeptoVendas.Where(x => x.MesCorrente == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).ToList().Count )</td>
-                                <td>51</td>
+                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.Trim().ToLower() && x.turno.Trim().ToLower().Contains("manhã")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.Trim().ToLower() && x.turno.Trim().ToLower().Contains("manhã")).FirstOrDefault().valor.ToString() : "--") </td>
+                                <td rowspan="3"> @(Model.listaInformacoesDeptoVendas.Where(x => x.MesCorrente == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).ToList().Sum(y => y.quantidade) )</td>
+                                <td rowspan="3">@(Model.listaHorasTrabalhadas.Where(x => x.Mes == SIGEWebApi.Controllers.RelatoriosController.ConverterMesToInt(Model.listaInformacoesProducao[i].Key)).Sum(y => Convert.ToInt32(y.HorasTrabalhadasNoMes)))</td>
                             </tr>
                             <tr>
                                 <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault().turno : "--")</td>
                                 <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Tarde").FirstOrDefault().quantidade.ToString() : "--")</td>
-                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Tarde")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Tarde")).FirstOrDefault().valor.ToString() : "--")</td>
-                                <td>43</td>
+                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.Trim().ToLower() && x.turno.Trim().ToLower().Contains("tarde")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.Trim().ToLower() && x.turno.Trim().ToLower().Contains("tarde")).FirstOrDefault().valor.ToString() : "--")</td>
+                                @*<td>43</td>*@
                             </tr>
                             <tr>
                                 <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault().turno : "--")</td>
                                 <td>@(Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault() != null ? Model.listaInformacoesProducao[i].Where(x => x.turno == "Noite").FirstOrDefault().quantidade.ToString() : "--")</td>
-                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Noite")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim() == Model.listaInformacoesProducao[i].Key.Trim() && x.turno.Trim().Contains("Noite")).FirstOrDefault().valor.ToString() : "--")</td>
-                                <td>31</td>
+                                <td>@(Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.Trim().ToLower() && x.turno.Trim().ToLower().Contains("noite")).FirstOrDefault() != null ? Model.listaInformacoesFinanceiro.Where(x => x.mes.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.Trim().ToLower() && x.turno.Trim().ToLower().Contains("noite")).FirstOrDefault().valor.ToString() : "--")</td>
+                                @*<td>31</td>*@
                             </tr>
                         }
                     </tbody>
@@ -111,27 +111,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Janeiro</td>
-                            <td>10</td>
-                            <td></td>
-                            <td>1</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>Fevereiro </td>
-                            <td>33</td>
-                            <td></td>
-                            <td>3</td>
-                            <td>300</td>
-                        </tr>
-                        <tr>
-                            <td>Março</td>
-                            <td>30</td>
-                            <td></td>
-                            <td>2</td>
-                            <td>150</td>
-                        </tr>
+                        @for (var i = 0; i < Model.listaInformacoesProducao.Count; i++)
+                        {
+                            <tr>
+                                <td>@Model.listaInformacoesProducao[i].Key</td>
+                                <td>@(Model.listaInformacoesProducao[i].Sum(x => x.quantidade))</td>
+                                <td> @(Model.listaInformacoesDeptoVendas.Where(x => x.MesCorrente == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).ToList().Sum(y => y.quantidade) )</td>
+                                <td>@(Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).ToList().Count )</td>
+                                <td>----</td>
+                                @*<td>@(Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim() && x.eventoOrcamentos != null ).Any() ? Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).Sum(y => y.eventoOrcamentos).ToString() : "--" )</td>*@
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

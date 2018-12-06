@@ -213,6 +213,8 @@
     <Compile Include="DAL\IntegracaoFinanceiro.cs" />
     <Compile Include="DAL\IntegracaoProducao.cs" />
     <Compile Include="DAL\IntegracaoVendas.cs" />
+    <Compile Include="DTO\InformacaoEventoOrcamentosDTO.cs" />
+    <Compile Include="DTO\InformacaoEventosDTO.cs" />
     <Compile Include="DTO\InformacaoFinanceiroDTO.cs" />
     <Compile Include="DTO\InformacaoProducaoDTO.cs" />
     <Compile Include="DTO\InformacaoVendasDTO.cs" />

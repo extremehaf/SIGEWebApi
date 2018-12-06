@@ -17,10 +17,14 @@ namespace SIGEWebApi.Controllers
         public async Task<ActionResult> Index()
         {
             RelatoriosViewModel retorno = new RelatoriosViewModel();
+            HorasTrabalhadasController HtController = new HorasTrabalhadasController();
             await BuscarDadosProducao(retorno);
 
             retorno.listaInformacoesFinanceiro = await BuscarDadosFinanceiro();
             retorno.listaInformacoesDeptoVendas = await BuscarDadosDeptoVendas();
+            retorno.listaHorasTrabalhadas =  HtController.GetHorasTrabalhadas().ToList();
+            retorno.listaEventos = await BuscarEventos();
+            retorno.listaEventosOrcamentos = await BuscarEventosOrcamentos();
 
             return View(retorno);
         }
@@ -28,10 +32,10 @@ namespace SIGEWebApi.Controllers
         private static async Task BuscarDadosProducao(RelatoriosViewModel retorno)
         {
             var lstRetorno = await IntegracaoProducao.GetAsync("getAllProducaoPorMesTurno");
-            List<IGrouping<string, InformacaoProducaoDTO>> agrupado = lstRetorno.GroupBy(i => i.mes).ToList();
+            List<IGrouping<string, InformacaoProducaoDTO>> agrupado = lstRetorno.GroupBy(i => i.mes.ToLower().Trim()).ToList();
 
 
-            retorno.listaInformacoesProducao = agrupado;
+            retorno.listaInformacoesProducao = agrupado.OrderBy(x => x.Key).ToList();
         }
 
         private static async Task<List<InformacaoFinanceiroDTO>> BuscarDadosFinanceiro()
@@ -48,7 +52,21 @@ namespace SIGEWebApi.Controllers
             return lstRetorno;
         }
 
-        private static int ConverterMesToInt(string mes)
+        private static async Task<List<InformacaoEventosDTO>> BuscarEventos()
+        {
+            var lstRetorno = await IntegracaoVendas.GetEventosAsync("api/Eventos");
+
+            return lstRetorno;
+        }
+
+        private static async Task<List<InformacaoEventoOrcamentosDTO>> BuscarEventosOrcamentos()
+        {
+            var lstRetorno = await IntegracaoVendas.GetEventosOrcamentosAsync("api/EventoOrcamentos");
+
+            return lstRetorno;
+        }
+
+        public static int ConverterMesToInt(string mes)
         {
             switch (mes.ToLower().Trim())
             {
@@ -80,76 +98,76 @@ namespace SIGEWebApi.Controllers
             }
         }
 
-        // GET: Relatorios/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        //// GET: Relatorios/Details/5
+        //public ActionResult Details(int id)
+        //{
+        //    return View();
+        //}
 
-        // GET: Relatorios/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //// GET: Relatorios/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
 
-        // POST: Relatorios/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
+        //// POST: Relatorios/Create
+        //[HttpPost]
+        //public ActionResult Create(FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
-        // GET: Relatorios/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //// GET: Relatorios/Edit/5
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
 
-        // POST: Relatorios/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
+        //// POST: Relatorios/Edit/5
+        //[HttpPost]
+        //public ActionResult Edit(int id, FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add update logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
-        // GET: Relatorios/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //// GET: Relatorios/Delete/5
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
-        // POST: Relatorios/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
+        //// POST: Relatorios/Delete/5
+        //[HttpPost]
+        //public ActionResult Delete(int id, FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

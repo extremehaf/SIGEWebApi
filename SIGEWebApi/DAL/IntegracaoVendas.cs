@@ -28,7 +28,7 @@ namespace SIGEWebApi.DAL
         public static async Task<List<InformacaoVendasDTO>> GetAsync(string path)
         {
             List<InformacaoVendasDTO> product = new List<InformacaoVendasDTO>();
-
+            client.CancelPendingRequests();
             client.BaseAddress = new Uri("http://sigemv.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
@@ -40,12 +40,67 @@ namespace SIGEWebApi.DAL
                 {
                     product = await response.Content.ReadAsAsync<List<InformacaoVendasDTO>>();
                 }
+                client.Dispose();
             }
             catch (Exception ex)
             {
 
             }
+            finally
+            {
+
+            }
             
+            return product;
+        }
+
+        public static async Task<List<InformacaoEventosDTO>> GetEventosAsync(string path)
+        {
+            client = new HttpClient();
+            List<InformacaoEventosDTO> product = new List<InformacaoEventosDTO>();
+            client.CancelPendingRequests();
+            client.BaseAddress = new Uri("http://sigemv.azurewebsites.net/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(path);
+                if (response.IsSuccessStatusCode)
+                {
+                    product = await response.Content.ReadAsAsync<List<InformacaoEventosDTO>>();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return product;
+        }
+
+        public static async Task<List<InformacaoEventoOrcamentosDTO>> GetEventosOrcamentosAsync(string path)
+        {
+            client = new HttpClient();
+            List<InformacaoEventoOrcamentosDTO> product = new List<InformacaoEventoOrcamentosDTO>();
+            client.CancelPendingRequests();
+            client.BaseAddress = new Uri("http://sigemv.azurewebsites.net/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(path);
+                if (response.IsSuccessStatusCode)
+                {
+                    product = await response.Content.ReadAsAsync<List<InformacaoEventoOrcamentosDTO>>();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             return product;
         }
 
