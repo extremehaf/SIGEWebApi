@@ -24,7 +24,7 @@ namespace SIGEWebApi.Controllers
             retorno.listaInformacoesDeptoVendas = await BuscarDadosDeptoVendas();
             retorno.listaHorasTrabalhadas =  HtController.GetHorasTrabalhadas().ToList();
             retorno.listaEventos = await BuscarEventos();
-            retorno.listaEventosOrcamentos = await BuscarEventosOrcamentos();
+            //retorno.listaEventosOrcamentos = await BuscarEventosOrcamentos();
 
             return View(retorno);
         }
@@ -55,6 +55,13 @@ namespace SIGEWebApi.Controllers
         private static async Task<List<InformacaoEventosDTO>> BuscarEventos()
         {
             var lstRetorno = await IntegracaoVendas.GetEventosAsync("api/Eventos");
+
+            var lstOrcamentos = await IntegracaoVendas.GetEventosOrcamentosAsync("api/EventoOrcamentos");
+
+            foreach(var evento in lstRetorno)
+            {
+                evento.eventoOrcamentos = lstOrcamentos.Where(x => x.IdEventoFK == evento.IdEvento).Sum(y => y.Gasto);
+            }
 
             return lstRetorno;
         }

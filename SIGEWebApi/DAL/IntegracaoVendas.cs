@@ -15,15 +15,7 @@ namespace SIGEWebApi.DAL
         static HttpClient client = new HttpClient();
 
 
-        static async Task<Uri> CreateProductAsync(Object product)
-        {
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                "api/products", product);
-            response.EnsureSuccessStatusCode();
-
-            // return URI of the created resource.
-            return response.Headers.Location;
-        }
+        
 
         public static async Task<List<InformacaoVendasDTO>> GetAsync(string path)
         {
@@ -70,6 +62,7 @@ namespace SIGEWebApi.DAL
                 {
                     product = await response.Content.ReadAsAsync<List<InformacaoEventosDTO>>();
                 }
+                client.Dispose();
             }
             catch (Exception ex)
             {
@@ -95,6 +88,7 @@ namespace SIGEWebApi.DAL
                 {
                     product = await response.Content.ReadAsAsync<List<InformacaoEventoOrcamentosDTO>>();
                 }
+                client.Dispose();
             }
             catch (Exception ex)
             {
@@ -104,73 +98,82 @@ namespace SIGEWebApi.DAL
             return product;
         }
 
-        static async Task<Object> UpdateProductAsync(Object product)
-        {
-            HttpResponseMessage response = await client.PutAsJsonAsync(
-                $"api/products/{product}", product);
-            response.EnsureSuccessStatusCode();
+        //static async Task<Uri> CreateProductAsync(Object product)
+        //{
+        //    HttpResponseMessage response = await client.PostAsJsonAsync(
+        //        "api/products", product);
+        //    response.EnsureSuccessStatusCode();
 
-            // Deserialize the updated product from the response body.
-            product = await response.Content.ReadAsAsync<Object>();
-            return product;
-        }
+        //    // return URI of the created resource.
+        //    return response.Headers.Location;
+        //}
+        //static async Task<Object> UpdateProductAsync(Object product)
+        //{
+        //    HttpResponseMessage response = await client.PutAsJsonAsync(
+        //        $"api/products/{product}", product);
+        //    response.EnsureSuccessStatusCode();
 
-        static async Task<HttpStatusCode> DeleteProductAsync(string id)
-        {
-            HttpResponseMessage response = await client.DeleteAsync(
-                $"api/products/{id}");
-            return response.StatusCode;
-        }
+        //    // Deserialize the updated product from the response body.
+        //    product = await response.Content.ReadAsAsync<Object>();
+        //    return product;
+        //}
 
-        static void Main()
-        {
-            RunAsync().GetAwaiter().GetResult();
-        }
+        //static async Task<HttpStatusCode> DeleteProductAsync(string id)
+        //{
+        //    HttpResponseMessage response = await client.DeleteAsync(
+        //        $"api/products/{id}");
+        //    return response.StatusCode;
+        //}
 
-        static async Task RunAsync()
-        {
-            // Update port # in the following line.
-            client.BaseAddress = new Uri("http://localhost:64195/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+        //static void Main()
+        //{
+        //    RunAsync().GetAwaiter().GetResult();
+        //}
 
-            try
-            {
-                // Create a new product
-                Object product = new
-                {
-                    Name = "Gizmo",
-                    Price = 100,
-                    Category = "Widgets"
-                };
+        //static async Task RunAsync()
+        //{
+        //    // Update port # in the following line.
+        //    client.BaseAddress = new Uri("http://localhost:64195/");
+        //    client.DefaultRequestHeaders.Accept.Clear();
+        //    client.DefaultRequestHeaders.Accept.Add(
+        //        new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var url = await CreateProductAsync(product);
-                Console.WriteLine($"Created at {url}");
+        //    try
+        //    {
+        //        // Create a new product
+        //        Object product = new
+        //        {
+        //            Name = "Gizmo",
+        //            Price = 100,
+        //            Category = "Widgets"
+        //        };
 
-                // Get the product
-                product = await GetAsync(url.PathAndQuery);
+        //        var url = await CreateProductAsync(product);
+        //        Console.WriteLine($"Created at {url}");
 
-                // Update the product
-                Console.WriteLine("Updating price...");
-                product = 80;
-                await UpdateProductAsync(product);
+        //        // Get the product
+        //        product = await GetAsync(url.PathAndQuery);
 
-                // Get the updated product
-                product = await GetAsync(url.PathAndQuery);
+        //        // Update the product
+        //        Console.WriteLine("Updating price...");
+        //        product = 80;
+        //        await UpdateProductAsync(product);
+
+        //        // Get the updated product
+        //        product = await GetAsync(url.PathAndQuery);
 
 
-                // Delete the product
-                var statusCode = await DeleteProductAsync("1");
-                Console.WriteLine($"Deleted (HTTP Status = {(int)statusCode})");
+        //        // Delete the product
+        //        var statusCode = await DeleteProductAsync("1");
+        //        Console.WriteLine($"Deleted (HTTP Status = {(int)statusCode})");
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //    }
 
-            Console.ReadLine();
-        }
+        //    Console.ReadLine();
+        //}
     }
 }

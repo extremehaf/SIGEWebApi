@@ -118,8 +118,7 @@
                                 <td>@(Model.listaInformacoesProducao[i].Sum(x => x.quantidade))</td>
                                 <td> @(Model.listaInformacoesDeptoVendas.Where(x => x.MesCorrente == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).ToList().Sum(y => y.quantidade) )</td>
                                 <td>@(Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).ToList().Count )</td>
-                                <td>----</td>
-                                @*<td>@(Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim() && x.eventoOrcamentos != null ).Any() ? Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).Sum(y => y.eventoOrcamentos).ToString() : "--" )</td>*@
+                                <td>@(Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim() && x.eventoOrcamentos != null ).Any() ? Model.listaEventos.Where(x => x.MesCorrente.Trim().ToLower() == Model.listaInformacoesProducao[i].Key.ToLower().Trim()).FirstOrDefault().eventoOrcamentos.ToString() : "não registrado" )</td>
                             </tr>
                         }
                     </tbody>
